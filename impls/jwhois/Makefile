@@ -15,3 +15,6 @@ build:
 
 clean:
 	rm -rf "$(NV)" "$(NV).tar.gz" whois-jwhois fedora.conf
+
+check:
+	@true
