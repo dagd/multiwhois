@@ -6,7 +6,7 @@ all: fetch patch build
 .PHONY: all
 
 fetch-default:
-	curl -Lo whois.c "$(shell cat client.url)"
+	curl -LO "$(SOURCE)"
 
 patch-default:
 	patch --no-backup-if-mismatch < client.patch
