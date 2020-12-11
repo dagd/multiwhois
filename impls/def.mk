@@ -22,7 +22,7 @@ clean-default:
 	rm -fv whois-$(CWD) whois.c
 
 check-default:
-	./whois-$(CWD) $(CHECK_FLAGS) google.com 2>&1 | grep -q markmonitor
+	./whois-$(CWD) $(CHECK_FLAGS) google.com | grep -q markmonitor
 
 %: %-default
 	@true
