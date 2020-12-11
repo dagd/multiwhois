@@ -9,6 +9,7 @@ Currently:
 * Includes support for the following clients:
   * freebsd
   * openbsd
+  * debian
 
 * We do not include the original sources in this repo itself, just patches to
   kludge them together into compiling, and scripts to automate that.
