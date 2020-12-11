@@ -9,15 +9,13 @@ $(SUBDIRS):
 
 clean:
 	for dir in $(SUBDIRS); do \
-		pushd "$$dir"; \
+		cd "$$dir"; \
 		$(MAKE) clean; \
-		popd; \
 	done
 
 
 check: all
 	for dir in $(SUBDIRS); do \
-		pushd "$$dir"; \
+		cd "$$dir"; \
 		$(MAKE) check || exit 1; \
-		popd; \
 	done
