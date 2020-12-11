@@ -22,6 +22,9 @@ clean-default:
 	rm -fv whois-$(CWD) whois.c
 
 check-default:
+	@echo "Full output:"
+	./whois-$(CWD) $(CHECK_FLAGS) google.com
+	@echo "Re-running to scan for keyword"
 	./whois-$(CWD) $(CHECK_FLAGS) google.com | grep -q markmonitor
 
 %: %-default
