@@ -1,0 +1,22 @@
+---
+name: multiwhois build
+on:
+  push:
+  pull_request:
+  schedule:
+    # Run it once a week, we don't expect these clients to change much, but
+    # want to keep patches in sync in case they do.
+    - cron: 0 0 * * 3
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+    name: Build
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build
+        run: make

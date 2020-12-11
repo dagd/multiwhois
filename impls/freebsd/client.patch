@@ -1,0 +1,42 @@
+diff --git a/usr.bin/whois/whois.c b/usr.bin/whois/whois.c
+index fa2911e3d45..03c9479eab1 100644
+--- a/usr.bin/whois/whois.c
++++ b/usr.bin/whois/whois.c
+@@ -42,7 +42,16 @@ static char sccsid[] = "@(#)whois.c	8.1 (Berkeley) 6/6/93";
+ #endif
+ 
+ #include <sys/cdefs.h>
+-__FBSDID("$FreeBSD$");
++#ifndef __printflike
++#define __printflike(_a,_b) \
++        __attribute__ ((__format__ (__printf__, _a, _b)))
++#endif
++
++#ifndef INFTIM
++#define INFTIM -1
++#endif
++
++//__FBSDID("$FreeBSD$");
+ 
+ #include <sys/types.h>
+ #include <sys/socket.h>
+@@ -450,7 +459,8 @@ whois(const char *query, const char *hostname, int flags)
+ 	struct addrinfo *hostres;
+ 	char *buf, *host, *nhost, *p;
+ 	int comment, s, f;
+-	size_t len, i;
++	size_t slen, i;
++	ssize_t len;
+ 
+ 	hostres = gethostinfo(hostname, 1);
+ 	s = connect_to_any_host(hostres);
+@@ -504,7 +514,8 @@ whois(const char *query, const char *hostname, int flags)
+ 	}
+ 
+ 	nhost = NULL;
+-	while ((buf = fgetln(fp, &len)) != NULL) {
++	slen = 0;
++	while ((len = getline(&buf, &slen, fp)) != -1) {
+ 		/* Nominet */
+ 		if (!(flags & WHOIS_SPAM_ME) &&
+ 		    len == 5 && strncmp(buf, "-- \r\n", 5) == 0)

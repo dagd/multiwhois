@@ -1,0 +1,59 @@
+--- whois.c.orig	2020-12-10 20:38:17.554857523 -0600
++++ whois.c	2020-12-10 20:48:12.428668692 -0600
+@@ -29,6 +29,8 @@
+  * SUCH DAMAGE.
+  */
+ 
++#define _GNU_SOURCE
++
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ 
+@@ -71,7 +73,7 @@
+ const char *ip_whois[] = { LNICHOST, RNICHOST, PNICHOST, BNICHOST,
+     AFNICHOST, NULL };
+ 
+-__dead void usage(void);
++void usage(void);
+ int whois(const char *, const char *, const char *, int);
+ char *choose_server(const char *, const char *, char **);
+ 
+@@ -142,9 +144,6 @@
+ 	if (!argc || (country != NULL && host != NULL))
+ 		usage();
+ 
+-	if (pledge("stdio dns inet", NULL) == -1)
+-		err(1, "pledge");
+-
+ 	if (host == NULL && country == NULL && !(flags & WHOIS_QUICK))
+ 		flags |= WHOIS_RECURSE;
+ 	for (name = *argv; (name = *argv) != NULL; argv++) {
+@@ -162,7 +161,8 @@
+ {
+ 	FILE *fp;
+ 	char *buf, *p, *nhost, *nbuf = NULL;
+-	size_t len;
++        size_t slen;
++	ssize_t len;
+ 	int i, s, error;
+ 	const char *reason = NULL, *fmt;
+ 	struct addrinfo hints, *res, *ai;
+@@ -221,7 +221,8 @@
+ 	fprintf(fp, fmt, query);
+ 	fflush(fp);
+ 	nhost = NULL;
+-	while ((buf = fgetln(fp, &len)) != NULL) {
++        slen = 0;
++	while ((len = getline(&buf, &slen, fp)) != -1) {
+ 		p = buf + len - 1;
+ 		if (isspace((unsigned char)*p)) {
+ 			do
+@@ -346,7 +347,7 @@
+ 	return (server);
+ }
+ 
+-__dead void
++void
+ usage(void)
+ {
+ 	extern char *__progname;
