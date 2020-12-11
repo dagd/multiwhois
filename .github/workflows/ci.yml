@@ -14,9 +14,19 @@ jobs:
     timeout-minutes: 15
     strategy:
       fail-fast: false
+      matrix:
+        client:
+          - debian
+          - freebsd
+          - openbsd
+          - jwhois
+
     name: Build
     steps:
       - uses: actions/checkout@v2
 
       - name: Build and test
-        run: make check
+        run: |
+          cd impls/${{ matrix.client }}
+          make
+          make check
