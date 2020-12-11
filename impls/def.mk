@@ -19,7 +19,7 @@ build-default:
 	$(CC) whois.c -o whois-$(CWD)
 
 clean-default:
-	rm -v whois-$(CWD) whois.c
+	rm -fv whois-$(CWD) whois.c
 
 check-default:
 	./whois-$(CWD) $(CHECK_FLAGS) google.com 2>&1 | grep -q markmonitor
